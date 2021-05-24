@@ -21,7 +21,7 @@ fi
 
 CHAIN_DB_PATH=$CHAIN_DIR/db
 
-if [ "$(ls -A \"$CHAIN_DB_PATH\")" ]; then
+if [ "$(ls -A \"$CHAIN_DB_PATH\" 2>/dev/null)" ]; then
     echo "Blockchain database already exists, no need to import, exiting"
     exit 0
 else
@@ -29,13 +29,14 @@ else
     mkdir -p "$CHAIN_DB_PATH"
 
     echo "Downloading $ARCHIVE_URL..."
-    curl -L $ARCHIVE_URL -o /tmp/archive.7z
+    mkdir -p /snapshot
+    wget -c -O /snapshot/archive.7z "$ARCHIVE_URL"
 
     echo "Unarchiving..."
-    7z x /tmp/archive.7z -o$CHAIN_DIR
+    7z x /snapshot/archive.7z -o$CHAIN_DIR
 
     echo "Cleaning up..."
-    rm -v /tmp/archive.7z
+    rm -v /snapshot/archive.7z
 
     echo
     find /polkadot/.local/share/
