@@ -21,11 +21,11 @@ fi
 
 CHAIN_DB_PATH=$CHAIN_DIR/db
 
-if [ "$(ls -A \"$CHAIN_DB_PATH\" 2>/dev/null)" ]; then
-    echo "Blockchain database already exists, no need to import, exiting"
+if [ "$(ls -A "$CHAIN_DB_PATH" 2>/dev/null)" ]; then
+    echo "Chain database $CHAIN_DB_PATH already exists, exiting..."
     exit 0
 else
-    echo "Did not find pre-existing data, importing blockchain"
+    echo "Did not find chain database files in $CHAIN_DB_PATH."
     mkdir -p "$CHAIN_DB_PATH"
 
     echo "Downloading $ARCHIVE_URL..."
