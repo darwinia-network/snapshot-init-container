@@ -16,7 +16,7 @@ jobs:
           go-version: ~1.14.0
       - run: |
           TAG=$(git describe --tags --abbrev=0 HEAD)
-          LAST_TAG=$(git describe --tags --abbrev=0 HEAD^)
+          LAST_TAG=$(git describe --tags --abbrev=0 HEAD^ || echo "4b825dc642cb6eb9a060e54bf8d69288fbee4904")
           RELEASE_NOTES=$(git log "$LAST_TAG..HEAD" --oneline --decorate)
 
           go get -u github.com/tcnksm/ghr
