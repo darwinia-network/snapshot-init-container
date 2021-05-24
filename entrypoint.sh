@@ -32,7 +32,7 @@ else
     curl -L $ARCHIVE_URL -o /tmp/archive.7z
 
     echo "Unarchiving..."
-    7z x /tmp/archive.7z -o "$CHAIN_DIR"
+    7z x /tmp/archive.7z -o$CHAIN_DIR
 
     echo "Cleaning up..."
     rm -v /tmp/archive.7z
