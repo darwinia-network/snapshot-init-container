@@ -36,6 +36,16 @@ wget -c -O /snapshot/archive.7z "$ARCHIVE_URL"
 echo "Unarchiving..."
 7z x /snapshot/archive.7z -o$CHAIN_DIR
 
+if [ -n "$CHOWN" ]; then
+    echo "Chown to $CHOWN..."
+    chown -R "$CHOWN" "$CHAIN_DB_PATH"
+fi
+
+if [ -n "$CHMOD" ]; then
+    echo "Chmod to $CHMOD..."
+    chmod -R "$CHMOD" "$CHAIN_DB_PATH"
+fi
+
 echo "Cleaning up..."
 rm -v /snapshot/archive.7z
 
