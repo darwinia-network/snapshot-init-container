@@ -22,22 +22,22 @@ fi
 CHAIN_DB_PATH=$CHAIN_DIR/db
 
 if [ "$(ls -A "$CHAIN_DB_PATH" 2>/dev/null)" ]; then
-    echo "Chain database $CHAIN_DB_PATH already exists, exiting..."
+    echo "Chain database $CHAIN_DB_PATH already exists, exiting"
     exit 0
-else
-    echo "Did not find chain database files in $CHAIN_DB_PATH."
-    mkdir -p "$CHAIN_DB_PATH"
-
-    echo "Downloading $ARCHIVE_URL..."
-    mkdir -p /snapshot
-    wget -c -O /snapshot/archive.7z "$ARCHIVE_URL"
-
-    echo "Unarchiving..."
-    7z x /snapshot/archive.7z -o$CHAIN_DIR
-
-    echo "Cleaning up..."
-    rm -v /snapshot/archive.7z
-
-    echo
-    find /polkadot/.local/share/
 fi
+
+echo "No chain database files in $CHAIN_DB_PATH, initializing..."
+mkdir -p "$CHAIN_DB_PATH"
+
+echo "Downloading $ARCHIVE_URL..."
+mkdir -p /snapshot
+wget -c -O /snapshot/archive.7z "$ARCHIVE_URL"
+
+echo "Unarchiving..."
+7z x /snapshot/archive.7z -o$CHAIN_DIR
+
+echo "Cleaning up..."
+rm -v /snapshot/archive.7z
+
+echo
+ls -la $CHAIN_DB_PATH
