@@ -2,9 +2,33 @@
 
 set -e
 
+unarchive_7z() {
+    echo "Unarchiving (7zip)..."
+    7z x "$1" -o$2
+}
+
+unarchive_zstd() {
+    echo "Unarchiving (zstd)..."
+    tar xv --zstd -f "$1" -C "$2"
+}
+
+unarchive_gzip() {
+    echo "Unarchiving (gzip)..."
+    tar xvzf "$1" -C "$2"
+}
+
 if [ -z "$ARCHIVE_URL" ]; then
     echo "No archive download url specified, exiting"
     exit 0
+elif [[ "$ARCHIVE_URL" == *.7z ]]; then
+    unarchive_func=unarchive_7z
+elif [[ "$ARCHIVE_URL" == *.tar.zst ]]; then
+    unarchive_func=unarchive_zstd
+elif [[ "$ARCHIVE_URL" == *.tar.gz ]]; then
+    unarchive_func=unarchive_gzip
+else
+    echo "Unsupported archive file type $ARCHIVE_URL"
+    exit 1
 fi
 
 if [ -z "$CHAIN_DIR" ]; then
@@ -31,10 +55,9 @@ mkdir -p "$CHAIN_DB_PATH"
 
 echo "Downloading $ARCHIVE_URL..."
 mkdir -p /snapshot
-wget -c -O /snapshot/archive.7z "$ARCHIVE_URL"
+wget -c --progress dot:giga -O /snapshot/archive.tmp "$ARCHIVE_URL"
 
-echo "Unarchiving..."
-7z x /snapshot/archive.7z -o$CHAIN_DIR
+$unarchive_func /snapshot/archive.tmp "$CHAIN_DIR"
 
 if [ -n "$CHOWN" ]; then
     echo "Chown to $CHOWN..."
@@ -47,7 +70,7 @@ if [ -n "$CHMOD" ]; then
 fi
 
 echo "Cleaning up..."
-rm -v /snapshot/archive.7z
+rm -v /snapshot/archive.tmp
 
 echo
 ls -la $CHAIN_DB_PATH
