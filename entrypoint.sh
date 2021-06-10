@@ -51,22 +51,22 @@ if [ "$(ls -A "$CHAIN_DB_PATH" 2>/dev/null)" ]; then
 fi
 
 echo "No chain database files in $CHAIN_DB_PATH, initializing..."
-mkdir -p "$CHAIN_DB_PATH"
 
 echo "Downloading $ARCHIVE_URL..."
 mkdir -p /snapshot
 wget -c --progress dot:giga -O /snapshot/archive.tmp "$ARCHIVE_URL"
 
+mkdir -p "$CHAIN_DB_PATH"
 $unarchive_func /snapshot/archive.tmp "$CHAIN_DIR"
 
 if [ -n "$CHOWN" ]; then
     echo "Chown to $CHOWN..."
-    chown -R "$CHOWN" "$CHAIN_DB_PATH"
+    chown -R "$CHOWN" "$CHAIN_DIR"
 fi
 
 if [ -n "$CHMOD" ]; then
     echo "Chmod to $CHMOD..."
-    chmod -R "$CHMOD" "$CHAIN_DB_PATH"
+    chmod -R "$CHMOD" "$CHAIN_DIR"
 fi
 
 echo "Cleaning up..."

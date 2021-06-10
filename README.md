@@ -54,14 +54,14 @@ initContainers:
         value: /data/chains/polkadot
 
       #
-      # Optional, if set, `chmod -R $CHMOD` will be used to reset the permissions of "db" directory
+      # Optional, if set, `chmod -R $CHMOD` will be used to reset the permissions of $CHAIN_DIR
       # Example: "777"
       #
       - name: CHMOD
         value: "777"
 
       #
-      # Optional, if set, `chown -R $CHOWN` will be used to reset owners (and groups) of "db" directory
+      # Optional, if set, `chown -R $CHOWN` will be used to reset owners (and groups) of $CHAIN_DIR
       # Example: 1000:1000
       #
       - name: CHOWN
