@@ -17,16 +17,9 @@ unarchive_gzip() {
     tar xvzf "$1" -C "$2"
 }
 
-if [ -z "$CHAIN_DIR" ]; then
-    echo 'Environment variable $CHAIN_DIR should not be empty'
-    exit 1
-    #
-    # With the chain node CLI option --base=/data, $CHAIN_DIR examples:
-    #
-    ## Kusama:   /data/chains/ksmcc3
-    ## Polkadot: /data/chains/polkadot
-    ## Darwinia: /data/chains/darwinia
-    ## Crab:     /data/chains/crab
+if [ -z "$ARCHIVE_URL" ]; then
+    echo "No archive download url specified, exiting"
+    exit 0
 fi
 
 CHAIN_DB_PATH=$CHAIN_DIR/db
@@ -38,10 +31,7 @@ else
     echo "No chain database files in $CHAIN_DB_PATH, initializing..."
 fi
 
-if [ -z "$ARCHIVE_URL" ]; then
-    echo "No archive download url specified, exiting"
-    exit 0
-elif [[ "$ARCHIVE_URL" == *.7z ]]; then
+if [[ "$ARCHIVE_URL" == *.7z ]]; then
     unarchive_func=unarchive_7z
 elif [[ "$ARCHIVE_URL" == *.tar.zst ]]; then
     unarchive_func=unarchive_zstd
@@ -50,6 +40,18 @@ elif [[ "$ARCHIVE_URL" == *.tar.gz ]]; then
 else
     echo "Unsupported archive file type $ARCHIVE_URL"
     exit 1
+fi
+
+if [ -z "$CHAIN_DIR" ]; then
+    echo 'Environment variable $CHAIN_DIR should not be empty'
+    exit 1
+    #
+    # With the chain node CLI option --base=/data, $CHAIN_DIR examples:
+    #
+    ## Kusama:   /data/chains/ksmcc3
+    ## Polkadot: /data/chains/polkadot
+    ## Darwinia: /data/chains/darwinia
+    ## Crab:     /data/chains/crab
 fi
 
 echo "Downloading $ARCHIVE_URL..."
